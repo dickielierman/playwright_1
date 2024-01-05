@@ -1,14 +1,21 @@
+import { UserWill } from '../utils/UserWill.js';
+import { isDesktopVeiwport } from '../utils/isDesktopViewport.js';
+
 export class NavigationPage {
   constructor(page) {
     this.page = page;
-    this.checkoutLink = page.locator('[data-qa="desktop-nav-link"]:has-text("Checkout")');
+    this.userWill = new UserWill();
     this.basketCounter = page.locator('[data-qa="header-basket-count"]');
+    this.burgerBtn = page.locator('[data-qa="burger-button"]');
+    this.checkoutLink = page.getByRole('link', { name: 'Checkout' });
   }
 
   goToCheckout = async () => {
-    await this.checkoutLink.waitFor();
-    await this.checkoutLink.click();
-    await this.page.waitForURL('/basket');
+    if (!isDesktopVeiwport(this.page)) {
+      await this.userWill.click(this.burgerBtn);
+    }
+    await this.userWill.click(this.checkoutLink);
+    await this.userWill.verifyUrl(this.page, '/basket');
   };
 
   getBasketCount = async () => {
