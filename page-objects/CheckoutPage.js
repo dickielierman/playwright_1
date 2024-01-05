@@ -19,7 +19,7 @@ export class CheckoutPage {
     const priceNums = allPriceText.map((priceText) => {
       return parseInt(priceText.replace('$', ''), 10);
     });
-    const lowestPriceRemoveBtn = this.basketRemoveItemBtn.nth(priceNums.indexOf(Math.min(priceNums)));
+    const lowestPriceRemoveBtn = this.basketRemoveItemBtn.nth(priceNums.indexOf(Math.min(...priceNums)));
     await this.userWill.click(lowestPriceRemoveBtn);
     await expect(this.basketCards).toHaveCount(initLength - 1);
   };
